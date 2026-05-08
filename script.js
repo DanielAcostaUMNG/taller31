@@ -55,36 +55,57 @@ function LimpiarCanvas()
 {
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 }
+
 function ObtenerCodigo(x, y, xmin, ymin, xmax, ymax)
 {
     let codigo = INSIDE;
+
     // izquierda
     if(x < xmin)
     {
         codigo |= LEFT;
     }
+
     // derecha
     else if(x > xmax)
     {
         codigo |= RIGHT;
     }
+
     // abajo
     if(y < ymin)
     {
         codigo |= BOTTOM;
     }
+
     // arriba
     else if(y > ymax)
     {
         codigo |= TOP;
     }
+
     return codigo;
 }
+
 function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
 {
-    let codigo1 = ObtenerCodigo(x1, y1, xmin, ymin, xmax, ymax);
+    let codigo1 = ObtenerCodigo(
+        x1,
+        y1,
+        xmin,
+        ymin,
+        xmax,
+        ymax
+    );
 
-    let codigo2 = ObtenerCodigo(x2, y2, xmin, ymin, xmax, ymax);
+    let codigo2 = ObtenerCodigo(
+        x2,
+        y2,
+        xmin,
+        ymin,
+        xmax,
+        ymax
+    );
 
     let aceptada = false;
 
@@ -96,17 +117,20 @@ function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
             aceptada = true;
             break;
         }
+
         // totalmente fuera
         else if((codigo1 & codigo2) !== 0)
         {
             break;
         }
+
         // parcialmente visible
         else
         {
             let codigoFuera;
             let x;
             let y;
+
             // escoger punto fuera
             if(codigo1 !== 0)
             {
@@ -116,34 +140,43 @@ function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
             {
                 codigoFuera = codigo2;
             }
+
             // arriba
             if(codigoFuera & TOP)
             {
-                x = x1 + (x2 - x1) * (ymax - y1) / (y2 - y1);
+                x = x1 + (x2 - x1) *
+                (ymax - y1) / (y2 - y1);
 
                 y = ymax;
             }
+
             // abajo
             else if(codigoFuera & BOTTOM)
             {
-                x = x1 + (x2 - x1) * (ymin - y1) / (y2 - y1);
+                x = x1 + (x2 - x1) *
+                (ymin - y1) / (y2 - y1);
 
                 y = ymin;
             }
+
             // derecha
             else if(codigoFuera & RIGHT)
             {
-                y = y1 + (y2 - y1) * (xmax - x1) / (x2 - x1);
+                y = y1 + (y2 - y1) *
+                (xmax - x1) / (x2 - x1);
 
                 x = xmax;
             }
+
             // izquierda
             else if(codigoFuera & LEFT)
             {
-                y = y1 + (y2 - y1) * (xmin - x1) / (x2 - x1);
+                y = y1 + (y2 - y1) *
+                (xmin - x1) / (x2 - x1);
 
                 x = xmin;
             }
+
             // actualizar primer punto
             if(codigoFuera === codigo1)
             {
@@ -159,6 +192,7 @@ function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
                     ymax
                 );
             }
+
             // actualizar segundo punto
             else
             {
@@ -176,22 +210,105 @@ function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
             }
         }
     }
+
     // línea aceptada
     if(aceptada)
     {
         return {
-            visible:true,
+            visible: true,
             x1,
             y1,
             x2,
             y2
         };
     }
+
     // línea rechazada
     return {
-        visible:false
+        visible: false
     };
 }
+
+function RenderizarEscena()
+{
+    // limpiar canvas
+    LimpiarCanvas();
+
+    // si no hay escenas
+    if(escenas.length === 0)
+    {
+        return;
+    }
+
+    // obtener escena actual
+    const escena = escenas[escenaActual];
+
+    // viewport
+    const v = escena.viewport;
+
+    DibujarViewport(
+        v.xmin,
+        v.ymin,
+        v.xmax,
+        v.ymax
+    );
+
+    // línea original
+    const o = escena.original;
+
+    DibujarLinea(
+        o.x1,
+        o.y1,
+        o.x2,
+        o.y2,
+        "red"
+    );
+
+    // línea recortada
+    if(escena.recorte.visible)
+    {
+        const r = escena.recorte;
+
+        DibujarLinea(
+            r.x1,
+            r.y1,
+            r.x2,
+            r.y2,
+            "orange"
+        );
+    }
+
+    // información lateral
+    document.getElementById("info").innerHTML = `
+    
+        <p><strong>Escena:</strong> ${escenaActual + 1}</p>
+
+        <p>
+        Línea original:<br>
+        (${o.x1}, ${o.y1})<br>
+        (${o.x2}, ${o.y2})
+        </p>
+
+        ${
+            escena.recorte.visible
+            ?
+            `
+            <p>
+            Línea recortada:<br>
+            (${escena.recorte.x1}, ${escena.recorte.y1})<br>
+            (${escena.recorte.x2}, ${escena.recorte.y2})
+            </p>
+            `
+            :
+            `
+            <p>
+            Línea fuera del viewport
+            </p>
+            `
+        }
+    `;
+}
+
 document.getElementById("agregarBtn")
 .addEventListener("click", () =>
 {
@@ -265,4 +382,7 @@ document.getElementById("agregarBtn")
     escenaActual = escenas.length - 1;
 
     console.log(escenas);
+
+    // dibujar escena
+    RenderizarEscena();
 });

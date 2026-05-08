@@ -386,3 +386,54 @@ document.getElementById("agregarBtn")
     // dibujar escena
     RenderizarEscena();
 });
+// ir a la primera escena
+document.getElementById("primeroBtn")
+.addEventListener("click", () =>
+{
+    if(escenas.length === 0)
+    {
+        return;
+    }
+
+    escenaActual = 0;
+
+    RenderizarEscena();
+});
+
+// ir a la escena anterior
+document.getElementById("anteriorBtn")
+.addEventListener("click", () =>
+{
+    if(escenaActual > 0)
+    {
+        escenaActual--;
+
+        RenderizarEscena();
+    }
+});
+
+// ir a la siguiente escena
+document.getElementById("siguienteBtn")
+.addEventListener("click", () =>
+{
+    if(escenaActual < escenas.length - 1)
+    {
+        escenaActual++;
+
+        RenderizarEscena();
+    }
+});
+
+// ir a la última escena
+document.getElementById("ultimoBtn")
+.addEventListener("click", () =>
+{
+    if(escenas.length === 0)
+    {
+        return;
+    }
+
+    escenaActual = escenas.length - 1;
+
+    RenderizarEscena();
+});

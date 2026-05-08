@@ -1,7 +1,9 @@
 const canvas = document.getElementById("canvas");
+
 const ctx = canvas.getContext("2d");
 
 const WIDTH = canvas.width;
+
 const HEIGHT = canvas.height;
 
 const escenas = [];
@@ -27,15 +29,22 @@ function DibujarViewport(xmin, ymin, xmax, ymax)
 
     // eje X
     ctx.beginPath();
+
     ctx.moveTo(0, HEIGHT - 1);
+
     ctx.lineTo(WIDTH, HEIGHT - 1);
+
     ctx.strokeStyle = "green";
+
     ctx.stroke();
 
     // eje Y
     ctx.beginPath();
+
     ctx.moveTo(0, 0);
+
     ctx.lineTo(0, HEIGHT);
+
     ctx.stroke();
 }
 
@@ -46,6 +55,7 @@ function DibujarLinea(x1, y1, x2, y2, color)
     ctx.beginPath();
 
     ctx.moveTo(x1, HEIGHT - y1);
+
     ctx.lineTo(x2, HEIGHT - y2);
 
     ctx.stroke();
@@ -87,8 +97,24 @@ function ObtenerCodigo(x, y, xmin, ymin, xmax, ymax)
     return codigo;
 }
 
-function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
+function CohenSutherland(
+    x1,
+    y1,
+    x2,
+    y2,
+    xmin,
+    ymin,
+    xmax,
+    ymax
+)
 {
+    if(x1 === x2 && y1 === y2)
+    {
+        return {
+            visible:false
+        };
+    }
+
     let codigo1 = ObtenerCodigo(
         x1,
         y1,
@@ -115,6 +141,7 @@ function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
         if((codigo1 | codigo2) === 0)
         {
             aceptada = true;
+
             break;
         }
 
@@ -128,7 +155,9 @@ function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
         else
         {
             let codigoFuera;
+
             let x;
+
             let y;
 
             // escoger punto fuera
@@ -181,6 +210,7 @@ function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
             if(codigoFuera === codigo1)
             {
                 x1 = Math.round(x);
+
                 y1 = Math.round(y);
 
                 codigo1 = ObtenerCodigo(
@@ -197,6 +227,7 @@ function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
             else
             {
                 x2 = Math.round(x);
+
                 y2 = Math.round(y);
 
                 codigo2 = ObtenerCodigo(
@@ -215,7 +246,9 @@ function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
     if(aceptada)
     {
         return {
-            visible: true,
+
+            visible:true,
+
             x1,
             y1,
             x2,
@@ -225,7 +258,8 @@ function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
 
     // línea rechazada
     return {
-        visible: false
+
+        visible:false
     };
 }
 
@@ -278,10 +312,13 @@ function RenderizarEscena()
         );
     }
 
-    // información lateral
+    // información
     document.getElementById("info").innerHTML = `
-    
-        <p><strong>Escena:</strong> ${escenaActual + 1}</p>
+
+        <p>
+        <strong>Escena:</strong>
+        ${escenaActual + 1}
+        </p>
 
         <p>
         Línea original:<br>
@@ -295,8 +332,11 @@ function RenderizarEscena()
             `
             <p>
             Línea recortada:<br>
-            (${escena.recorte.x1}, ${escena.recorte.y1})<br>
-            (${escena.recorte.x2}, ${escena.recorte.y2})
+            (${escena.recorte.x1},
+            ${escena.recorte.y1})<br>
+
+            (${escena.recorte.x2},
+            ${escena.recorte.y2})
             </p>
             `
             :
@@ -346,6 +386,23 @@ document.getElementById("agregarBtn")
         document.getElementById("y2").value
     );
 
+    // validar campos
+    if(
+        isNaN(xmin) ||
+        isNaN(ymin) ||
+        isNaN(xmax) ||
+        isNaN(ymax) ||
+        isNaN(x1) ||
+        isNaN(y1) ||
+        isNaN(x2) ||
+        isNaN(y2)
+    )
+    {
+        alert("Complete todos los campos");
+
+        return;
+    }
+
     // ejecutar clipping
     const recorte = CohenSutherland(
         x1,
@@ -381,12 +438,11 @@ document.getElementById("agregarBtn")
     // movernos a la última escena
     escenaActual = escenas.length - 1;
 
-    console.log(escenas);
-
-    // dibujar escena
+    // renderizar
     RenderizarEscena();
 });
-// ir a la primera escena
+
+// primera escena
 document.getElementById("primeroBtn")
 .addEventListener("click", () =>
 {
@@ -400,7 +456,7 @@ document.getElementById("primeroBtn")
     RenderizarEscena();
 });
 
-// ir a la escena anterior
+// escena anterior
 document.getElementById("anteriorBtn")
 .addEventListener("click", () =>
 {
@@ -412,7 +468,7 @@ document.getElementById("anteriorBtn")
     }
 });
 
-// ir a la siguiente escena
+// siguiente escena
 document.getElementById("siguienteBtn")
 .addEventListener("click", () =>
 {
@@ -424,7 +480,7 @@ document.getElementById("siguienteBtn")
     }
 });
 
-// ir a la última escena
+// última escena
 document.getElementById("ultimoBtn")
 .addEventListener("click", () =>
 {
@@ -437,3 +493,6 @@ document.getElementById("ultimoBtn")
 
     RenderizarEscena();
 });
+
+// limpiar al iniciar
+LimpiarCanvas();

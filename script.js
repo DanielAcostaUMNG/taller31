@@ -9,31 +9,34 @@ const LEFT = 1;
 const RIGHT = 2;
 const BOTTOM =4;
 const TOP = 8;
-function transformarY(y)
-{
-    return HEIGHT-y; //Para que el (0,0) empiece en la parte inferior derecha
-}
-function DibujarPixel(x,y, color="black")
-{
-    ctx.fillStyle = color;
-    ctx.fillRect(x, transformarY, 2, 2); 
-}
-function DibujarEjes()
-{
-    ctx.strokeStyle ="gray";
-    ctx.lineWidth = 1;
 
+function DibujarViewport(xmin,ymin, xmax, ymax)
+{
+    ctx.strokeStyle = "blue";
+    ctx.strtokeRect(xmin, HEIGHT - ymax, xmax-xmin, ymax-ymin);
+    
     // eje X
     ctx.beginPath();
     ctx.moveTo(0,HEIGHT);
-    ctx.lineTo(WIDTH, HEIGHT);
+    ctx.lineTo(canvas.WIDTH, HEIGHT);
+    ctx.strokeStyle = "green";
     ctx.stroke();
+    
     //eje Y
     ctx.beginPath();
     ctx.moveTo(0,0);
     ctx.lineTo(0, HEIGHT);
     ctx.stroke();
 
+
+}
+function DibujarLinea(x1,y1,x2,y2, color)
+{
+    ctx.strokeStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x1, HEIGHT - y1);
+    ctx.lineTo(x2, HEIGHT - 21);
+    ctx.stroke(); 
 }
 
 function LimpiarCanvas()

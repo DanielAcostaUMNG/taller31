@@ -55,3 +55,28 @@ function LimpiarCanvas()
 {
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
 }
+function ObtenerCodigo(x, y, xmin, ymin, xmax, ymax)
+{
+    let codigo = INSIDE;
+    // izquierda
+    if(x < xmin)
+    {
+        codigo |= LEFT;
+    }
+    // derecha
+    else if(x > xmax)
+    {
+        codigo |= RIGHT;
+    }
+    // abajo
+    if(y < ymin)
+    {
+        codigo |= BOTTOM;
+    }
+    // arriba
+    else if(y > ymax)
+    {
+        codigo |= TOP;
+    }
+    return codigo;
+}

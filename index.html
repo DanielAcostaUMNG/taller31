@@ -1,57 +1,113 @@
-<!DOCTYPE html> 
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>TALLER 3.1 COHEN-SUTHERLAND</title>
-    </head>
-    <body>
-        <h1> Algoritmo Cohen-Sutherland </
-            <div id="contenedor">
+<!DOCTYPE html>
+<html lang="es">
 
-    <canvas id="canvas" width="700" height="500"></canvas>
+<head>
 
-    <div id="panel">
+    <meta charset="UTF-8">
 
-        <h2>Ventana de recorte</h2>
+    <title>TALLER 3.1 COHEN-SUTHERLAND</title>
 
-        <div>
-            x1 <input type="number" id="xmin">
-            y1 <input type="number" id="ymin">
-        </div>
+    <style>
 
-        <div>
-            x2 <input type="number" id="xmax">
-            y2 <input type="number" id="ymax">
-        </div>
+        body{
+            margin:0;
+            padding:20px;
+            background:#dcdcdc;
+            font-family:Arial;
+        }
 
-        <h2>Línea</h2>
+        h1{
+            margin-bottom:20px;
+        }
 
-        <div>
-            x1 <input type="number" id="x1">
-            y1 <input type="number" id="y1">
-        </div>
+        #contenedor{
+            display:flex;
+            gap:20px;
+        }
 
-        <div>
-            x2 <input type="number" id="x2">
-            y2 <input type="number" id="y2">
-        </div>
+        #canvas{
+            background:#eeeeee;
+            border:1px solid gray;
+        }
 
-        <button id="agregarBtn">Actualizar</button>
+        #panel{
+            width:220px;
+        }
 
-        <div id="info"></div>
+        input{
+            width:50px;
+            margin:2px;
+        }
 
-        <div id="navegacion">
+        button{
+            margin-top:5px;
+            padding:5px 10px;
+        }
 
-            <button id="primeroBtn">|&lt;</button>
-            <button id="anteriorBtn">&lt;</button>
-            <button id="siguienteBtn">&gt;</button>
-            <button id="ultimoBtn">&gt;|</button>
+        #navegacion{
+            margin-top:20px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Algoritmo Cohen-Sutherland</h1>
+
+    <div id="contenedor">
+
+        <canvas id="canvas" width="700" height="500"></canvas>
+
+        <div id="panel">
+
+            <h2>Ventana de recorte</h2>
+
+            <div>
+                x1 <input type="number" id="xmin">
+                y1 <input type="number" id="ymin">
+            </div>
+
+            <div>
+                x2 <input type="number" id="xmax">
+                y2 <input type="number" id="ymax">
+            </div>
+
+            <h2>Línea</h2>
+
+            <div>
+                x1 <input type="number" id="x1">
+                y1 <input type="number" id="y1">
+            </div>
+
+            <div>
+                x2 <input type="number" id="x2">
+                y2 <input type="number" id="y2">
+            </div>
+
+            <button id="agregarBtn">Actualizar</button>
+
+            <div id="info"></div>
+
+            <div id="navegacion">
+
+                <button id="primeroBtn">|&lt;</button>
+
+                <button id="anteriorBtn">&lt;</button>
+
+                <button id="siguienteBtn">&gt;</button>
+
+                <button id="ultimoBtn">&gt;|</button>
+
+            </div>
 
         </div>
 
     </div>
 
-</div>h1>
-        <script src="script.js"></script>
-    </body>
+    <script src="script.js"></script>
+
+</body>
+
 </html>

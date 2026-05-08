@@ -192,3 +192,77 @@ function CohenSutherland(x1, y1, x2, y2, xmin, ymin, xmax, ymax)
         visible:false
     };
 }
+document.getElementById("agregarBtn")
+.addEventListener("click", () =>
+{
+    // viewport
+    const xmin = parseInt(
+        document.getElementById("xmin").value
+    );
+
+    const ymin = parseInt(
+        document.getElementById("ymin").value
+    );
+
+    const xmax = parseInt(
+        document.getElementById("xmax").value
+    );
+
+    const ymax = parseInt(
+        document.getElementById("ymax").value
+    );
+
+    // línea
+    const x1 = parseInt(
+        document.getElementById("x1").value
+    );
+
+    const y1 = parseInt(
+        document.getElementById("y1").value
+    );
+
+    const x2 = parseInt(
+        document.getElementById("x2").value
+    );
+
+    const y2 = parseInt(
+        document.getElementById("y2").value
+    );
+
+    // ejecutar clipping
+    const recorte = CohenSutherland(
+        x1,
+        y1,
+        x2,
+        y2,
+        xmin,
+        ymin,
+        xmax,
+        ymax
+    );
+
+    // guardar escena
+    escenas.push({
+
+        viewport:{
+            xmin,
+            ymin,
+            xmax,
+            ymax
+        },
+
+        original:{
+            x1,
+            y1,
+            x2,
+            y2
+        },
+
+        recorte
+    });
+
+    // movernos a la última escena
+    escenaActual = escenas.length - 1;
+
+    console.log(escenas);
+});
